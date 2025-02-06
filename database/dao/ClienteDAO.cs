@@ -32,7 +32,7 @@ namespace TiendaBicicletas.database.dao {
             }
         }
 
-        public Cliente? Get(int id) {
+        public Cliente Get(int id) {
             try {
                 // Creación de la conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();

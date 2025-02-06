@@ -10,31 +10,12 @@ using System.Windows;
 using TiendaBicicletas.model;
 
 namespace TiendaBicicletas.database.dao {
-    internal class InventarioDAO {
-        public void Delete(int tiendaID, int productoID) {
-            try {
-                // Creación de la conexión a BBDD
-                using MySqlConnection connection = DBConnection.GetConnection();
-                connection.Open();
+    internal class VentaDAO {
 
-                // Consulta a BBDD
-                string consulta = "DELETE FROM inventario WHERE tienda=@tiendaID AND producto=@productoID";
-
-                // Asignación de variables a la consulta
-                MySqlCommand command = new(consulta, connection);
-                command.Parameters.AddWithValue("@productoID", productoID);
-                command.Parameters.AddWithValue("@tiendaID", tiendaID);
-                command.Prepare();
-
-                // Ejecución de la consulta
-                command.ExecuteNonQuery();
-            } catch (Exception ex) {
-                MessageBox.Show($"Error al eliminar el inventario del producto {productoID} en la tienda {tiendaID}: {ex.Message}");
-            }
-        }
-
-        public Inventario? Get(int tiendaID) {
+        public List<Venta> ListByShop(int tiendaID) {
+            List<Venta> ventas = [];
             ProductoDAO productoDAO = new();
+            ClienteDAO clienteDAO = new();
             TiendaDAO tiendaDAO = new();
 
             try {
@@ -43,46 +24,11 @@ namespace TiendaBicicletas.database.dao {
                 connection.Open();
 
                 // Consulta a BBDD
-                string consulta = "SELECT producto, stock FROM tienda WHERE id = @tiendaID";
-
-                // Asignación de variables a la consulta
-                MySqlCommand command = new(consulta, connection);
-                command.Parameters.AddWithValue("@tiendaID", tiendaID);
-                command.Prepare();
-
-                // Lectura de datos de la consulta
-                using MySqlDataReader reader = command.ExecuteReader();
-                if (reader.Read()) {
-                    Tienda tienda = tiendaDAO.Get(tiendaID);
-                    Producto producto = productoDAO.Get(reader.GetInt32(0));
-                    int stock = reader.GetInt32(1);
-
-                    if (tienda != null && producto != null) {
-                        return new(tienda, producto, stock);
-                    }
-                }
-            } catch (Exception ex) {
-                MessageBox.Show($"Error al obtener la tienda con id {tiendaID}: {ex.Message}");
-            }
-
-            return null;
-        }
-
-        public List<Inventario> List() {
-            List<Inventario> inventarios = [];
-            ProductoDAO productoDAO = new();
-            TiendaDAO tiendaDAO = new();
-
-            try {
-                // Creación de la conexión a BBDD
-                using MySqlConnection connection = DBConnection.GetConnection();
-                connection.Open();
-
-                // Consulta a BBDD
-                string consulta = "SELECT * FROM Inventario";
+                string consulta = "SELECT * FROM Venta WHERE tienda=@tiendaID";
 
                 // Preparación de la consulta
                 MySqlCommand command = new(consulta, connection);
+                command.Parameters.AddWithValue("@tiendaID", tiendaID);
                 command.Prepare();
 
                 // Lectura de datos de la consulta
@@ -90,35 +36,120 @@ namespace TiendaBicicletas.database.dao {
                 if (reader.HasRows) {
                     while (reader.Read()) {
                         Tienda tienda = tiendaDAO.Get(reader.GetInt32(0));
-                        Producto producto = productoDAO.Get(reader.GetInt32(1));
-                        int stock = reader.GetInt32(2);
+                        Cliente cliente = clienteDAO.Get(reader.GetInt32(1));
+                        Producto producto = productoDAO.Get(reader.GetInt32(2));
+                        int cantidad = reader.GetInt32(3);
+                        DateTime fecha = reader.GetDateTime(4);
 
                         if (tienda != null && producto != null) {
-                            inventarios.Add(new(tienda, producto, stock));
+                            ventas.Add(new(tienda, cliente, producto, cantidad, fecha));
                         }
                     }
                 }
             } catch (Exception ex) {
-                MessageBox.Show($"Error al obtener todas las tiendas: {ex.Message}");
+                MessageBox.Show($"Error al obtener ventas por tienda: {ex.Message}");
             }
 
-            return inventarios;
+            return ventas;
         }
 
-        public void Insert(Inventario value) {
+        public List<Venta> ListByClient(int clienteID) {
+            List<Venta> ventas = [];
+            ProductoDAO productoDAO = new();
+            ClienteDAO clienteDAO = new();
+            TiendaDAO tiendaDAO = new();
+
+            try {
+                // Creación de la conexión a BBDD
+                using MySqlConnection connection = DBConnection.GetConnection();
+                connection.Open();
+
+                // Consulta a BBDD
+                string consulta = "SELECT * FROM Venta WHERE cliente=@clienteID";
+
+                // Preparación de la consulta
+                MySqlCommand command = new(consulta, connection);
+                command.Parameters.AddWithValue("@clienteID", clienteID);
+                command.Prepare();
+
+                // Lectura de datos de la consulta
+                using MySqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows) {
+                    while (reader.Read()) {
+                        Tienda tienda = tiendaDAO.Get(reader.GetInt32(0));
+                        Cliente cliente = clienteDAO.Get(reader.GetInt32(1));
+                        Producto producto = productoDAO.Get(reader.GetInt32(2));
+                        int cantidad = reader.GetInt32(3);
+                        DateTime fecha = reader.GetDateTime(4);
+
+                        if (tienda != null && producto != null) {
+                            ventas.Add(new(tienda, cliente, producto, cantidad, fecha));
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                MessageBox.Show($"Error al obtener ventas por cliente: {ex.Message}");
+            }
+
+            return ventas;
+        }
+
+        public List<Venta> ListByProduct(int productID) {
+            List<Venta> ventas = [];
+            ProductoDAO productoDAO = new();
+            ClienteDAO clienteDAO = new();
+            TiendaDAO tiendaDAO = new();
+
+            try {
+                // Creación de la conexión a BBDD
+                using MySqlConnection connection = DBConnection.GetConnection();
+                connection.Open();
+
+                // Consulta a BBDD
+                string consulta = "SELECT * FROM Venta WHERE producto=@productID";
+
+                // Preparación de la consulta
+                MySqlCommand command = new(consulta, connection);
+                command.Parameters.AddWithValue("@productID", productID);
+                command.Prepare();
+
+                // Lectura de datos de la consulta
+                using MySqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows) {
+                    while (reader.Read()) {
+                        Tienda tienda = tiendaDAO.Get(reader.GetInt32(0));
+                        Cliente cliente = clienteDAO.Get(reader.GetInt32(1));
+                        Producto producto = productoDAO.Get(reader.GetInt32(2));
+                        int cantidad = reader.GetInt32(3);
+                        DateTime fecha = reader.GetDateTime(4);
+
+                        if (tienda != null && producto != null) {
+                            ventas.Add(new(tienda, cliente, producto, cantidad, fecha));
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                MessageBox.Show($"Error al obtener ventas por cliente: {ex.Message}");
+            }
+
+            return ventas;
+        }
+
+        public void Insert(Venta value) {
             try {
                 // Creación de la conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
 
                 // Consulta a BBDD
-                string consulta = "INSERT INTO Inventario (tienda, producto, stock) VALUES (@tiendaID, @productoID, @stock);";
+                string consulta = "INSERT INTO Venta VALUES (@tiendaID, @clienteID, @productoID, @cantidad, @fecha);";
 
                 // Preparación de la consulta
                 MySqlCommand command = new(consulta, connection);
                 command.Parameters.AddWithValue("@tiendaID", value.Tienda.Id);
                 command.Parameters.AddWithValue("@productoID", value.Producto.Id);
-                command.Parameters.AddWithValue("@stock", value.Stock);
+                command.Parameters.AddWithValue("@cantidad", value.Cantidad);
+                command.Parameters.AddWithValue("@fecha", value.fecha);
                 command.Prepare();
 
                 // Ejecución de la consulta
