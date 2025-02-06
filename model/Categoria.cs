@@ -9,5 +9,9 @@ namespace TiendaBicicletas.model {
         public int Id { get; set; }
         public string Nombre { get; set; } = nombre;
         public string Descripcion { get; set; } = descripcion;
+
+        public override string ToString() {
+            return $"Categoria [Id={Id}, Nombre={Nombre}, Descripcion={Descripcion}]";
+        }
     }
 }
