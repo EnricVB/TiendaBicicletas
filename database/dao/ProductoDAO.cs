@@ -16,7 +16,7 @@ namespace TiendaBicicletas.database.dao {
         }
 
         public Producto? Get(int id) {
-            CategoriaDAO categoriaDAO = new();
+            TiendaDAO categoriaDAO = new();
 
             try {
                 // Creación de conexión a BBDD
@@ -51,7 +51,7 @@ namespace TiendaBicicletas.database.dao {
         }
 
         public List<Producto> List() {
-            CategoriaDAO categoriaDAO = new();
+            TiendaDAO categoriaDAO = new();
             List<Producto> productos = [];
 
             try {

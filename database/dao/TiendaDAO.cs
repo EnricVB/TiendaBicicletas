@@ -10,7 +10,7 @@ using System.Windows;
 using TiendaBicicletas.model;
 
 namespace TiendaBicicletas.database.dao {
-    internal class TiendaDAO : IDAO<Categoria> {
+    internal class TiendaDAO : IDAO<Tienda> {
         public void Delete(int id) {
             try {
                 // Creación de la conexión a BBDD
@@ -18,53 +18,52 @@ namespace TiendaBicicletas.database.dao {
                 connection.Open();
 
                 // Consulta a BBDD
-                string consulta = "DELETE FROM categoria WHERE id=@catID";
+                string consulta = "DELETE FROM tienda WHERE id=@tiendaID";
 
                 // Asignación de variables a la consulta
                 MySqlCommand command = new(consulta, connection);
-                command.Parameters.AddWithValue("@catID", id);
+                command.Parameters.AddWithValue("@tiendaID", id);
                 command.Prepare();
 
                 // Ejecución de la consulta
                 command.ExecuteNonQuery();
             } catch (Exception ex) {
-                MessageBox.Show($"Error al eliminar la categoría con id {id}: {ex.Message}");
+                MessageBox.Show($"Error al eliminar la tienda con id {id}: {ex.Message}");
             }
         }
 
-        public Categoria? Get(int id) {
+        public Tienda? Get(int id) {
             try {
                 // Creación de la conexión a BBDD
                 using MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
 
                 // Consulta a BBDD
-                string consulta = "SELECT nombre, descripcion FROM Categoria WHERE id = @catID";
+                string consulta = "SELECT direccion FROM tienda WHERE id = @tiendaID";
 
                 // Asignación de variables a la consulta
                 MySqlCommand command = new(consulta, connection);
-                command.Parameters.AddWithValue("@catID", id);
+                command.Parameters.AddWithValue("@tiendaID", id);
                 command.Prepare();
 
                 // Lectura de datos de la consulta
                 using MySqlDataReader reader = command.ExecuteReader();
                 if (reader.Read()) {
-                    string c_nombre = reader.GetString(0);
-                    string c_descripcion = reader.GetString(1);
+                    string t_direccion = reader.GetString(0);
 
-                    return new(c_nombre, c_descripcion) {
+                    return new(t_direccion) {
                         Id = id
                     };
                 }
             } catch (Exception ex) {
-                MessageBox.Show($"Error al obtener la categoría con id {id}: {ex.Message}");
+                MessageBox.Show($"Error al obtener la tienda con id {id}: {ex.Message}");
             }
 
             return null;
         }
 
-        public List<Categoria> List() {
-            List<Categoria> categorias = [];
+        public List<Tienda> List() {
+            List<Tienda> tiendas = [];
 
             try {
                 // Creación de la conexión a BBDD
@@ -72,7 +71,7 @@ namespace TiendaBicicletas.database.dao {
                 connection.Open();
 
                 // Consulta a BBDD
-                string consulta = "SELECt * FROM Categoria";
+                string consulta = "SELECT * FROM Tienda";
 
                 // Preparación de la consulta
                 MySqlCommand command = new(consulta, connection);
@@ -82,35 +81,33 @@ namespace TiendaBicicletas.database.dao {
                 using MySqlDataReader reader = command.ExecuteReader();
                 if (reader.HasRows) {
                     while (reader.Read()) {
-                        int c_id = reader.GetInt32(0);
-                        string c_nombre = reader.GetString(1);
-                        string c_descripcion = reader.GetString(2);
+                        int t_id = reader.GetInt32(0);
+                        string t_direccion = reader.GetString(1);
 
-                        categorias.Add(new(c_nombre, c_descripcion) {
-                            Id = c_id
+                        tiendas.Add(new(t_direccion) {
+                            Id = t_id
                         });
                     }
                 }
             } catch (Exception ex) {
-                MessageBox.Show($"Error al obtener todas las categorías: {ex.Message}");
+                MessageBox.Show($"Error al obtener todas las tiendas: {ex.Message}");
             }
 
-            return categorias;
+            return tiendas;
         }
 
-        public void Insert(Categoria value) {
+        public void Insert(Tienda value) {
             try {
                 // Creación de la conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
 
                 // Consulta a BBDD
-                string consulta = "INSERT INTO categoria (nombre, descripcion) VALUES (@catName, @catDesc);";
+                string consulta = "INSERT INTO Tienda (direccion) VALUES (@tiendaDireccion);";
 
                 // Preparación de la consulta
                 MySqlCommand command = new(consulta, connection);
-                command.Parameters.AddWithValue("@catName", value.Nombre);
-                command.Parameters.AddWithValue("@catDesc", value.Descripcion);
+                command.Parameters.AddWithValue("@tiendaDireccion", value.Direccion);
                 command.Prepare();
 
                 // Ejecución de la consulta
@@ -121,20 +118,19 @@ namespace TiendaBicicletas.database.dao {
         }
 
 
-        public void Update(int id, Categoria value) {
+        public void Update(int id, Tienda value) {
             try {
                 // Creación de la conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
 
                 // Consulta a BBDD
-                string consulta = "UPDATE categoria SET nombre=@catName, descripcion=@catDesc WHERE id=@catID;";
+                string consulta = "UPDATE Tienda SET direccion=@tiendaDireccion WHERE id=@tiendaID;";
 
                 // Preparación de la consulta
                 MySqlCommand command = new(consulta, connection);
-                command.Parameters.AddWithValue("@catID", id);
-                command.Parameters.AddWithValue("@catName", value.Nombre);
-                command.Parameters.AddWithValue("@catDesc", value.Descripcion);
+                command.Parameters.AddWithValue("@tiendaID", id);
+                command.Parameters.AddWithValue("@tiendaDireccion", value.Direccion);
                 command.Prepare();
 
                 // Ejecución de la consulta
