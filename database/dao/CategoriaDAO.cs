@@ -52,11 +52,9 @@ namespace TiendaBicicletas.database.dao {
                     string c_nombre = reader.GetString(0);
                     string c_descripcion = reader.GetString(1);
 
-                    Categoria categoria = new(c_nombre, c_descripcion) {
+                    return new(c_nombre, c_descripcion) {
                         Id = id
                     };
-
-                    return categoria;
                 }
             } catch (Exception ex) {
                 MessageBox.Show($"Error al obtener la categoría con id {id}: {ex.Message}");
@@ -88,11 +86,9 @@ namespace TiendaBicicletas.database.dao {
                         string c_nombre = reader.GetString(1);
                         string c_descripcion = reader.GetString(2);
 
-                        Categoria categoria = new(c_nombre, c_descripcion) {
+                        categorias.Add(new(c_nombre, c_descripcion) {
                             Id = c_id
-                        };
-
-                        categorias.Add(categoria);
+                        });
                     }
                 }
             } catch (Exception ex) {

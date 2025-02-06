@@ -78,11 +78,10 @@ namespace TiendaBicicletas.database.dao {
                 if (reader.Read()) {
                     int id = reader.GetInt32(0);
                     string nombre = reader.GetString(1);
-                    Cliente cliente = new(nombre) {
+                    
+                    clientes.Add(new(nombre) {
                         Id = id
-                    };
-
-                    clientes.Add(cliente);
+                    });
                 }
             } catch (Exception ex) {
                 MessageBox.Show($"Error al obtener el cliente con id {id}: {ex.Message}");
