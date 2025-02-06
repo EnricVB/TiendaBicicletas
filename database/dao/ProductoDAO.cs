@@ -12,7 +12,24 @@ using TiendaBicicletas.model;
 namespace TiendaBicicletas.database.dao {
     internal class ProductoDAO : IDAO<Producto> {
         public void Delete(int id) {
-            throw new NotImplementedException();
+            try {
+                // Creación de la conexión a BBDD
+                using MySqlConnection connection = DBConnection.GetConnection();
+                connection.Open();
+
+                // Consulta a BBDD
+                string consulta = "DELETE FROM producto WHERE id=@prodID";
+
+                // Asignación de variables a la consulta
+                MySqlCommand command = new(consulta, connection);
+                command.Parameters.AddWithValue("@prodID", id);
+                command.Prepare();
+
+                // Ejecución de la consulta
+                command.ExecuteNonQuery();
+            } catch (Exception ex) {
+                MessageBox.Show($"Error al eliminar el producto con id {id}: {ex.Message}");
+            }
         }
 
         public Producto? Get(int id) {
