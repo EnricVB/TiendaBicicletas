@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace TiendaBicicletas.model {
     internal class Cliente(string nombre) {
+        public int Id { get; set; }
         public string Nombre { get; set; } = nombre;
     }
 }

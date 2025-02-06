@@ -144,7 +144,7 @@ namespace TiendaBicicletas.database.dao {
                 // Ejecución de la consulta
                 command.ExecuteNonQuery();
             } catch (Exception ex) {
-                MessageBox.Show($"Error al insertar: {ex.Message}");
+                MessageBox.Show($"Error al actualizar: {ex.Message}");
             }
         }
     }
