@@ -11,8 +11,6 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using TiendaBicicletas.database.dao;
-
 namespace TiendaBicicletas
 {
     public partial class MainWindow : Window

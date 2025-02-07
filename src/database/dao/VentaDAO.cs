@@ -6,19 +6,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using TiendaBicicletas.src.database;
+using TiendaBicicletas.src.model;
 
-using TiendaBicicletas.model;
+namespace TiendaBicicletas.src.database.dao
+{
+    internal class VentaDAO
+    {
 
-namespace TiendaBicicletas.database.dao {
-    internal class VentaDAO {
-
-        public List<Venta> ListByShop(int tiendaID) {
+        public List<Venta> ListByShop(int tiendaID)
+        {
             List<Venta> ventas = [];
             ProductoDAO productoDAO = new();
             ClienteDAO clienteDAO = new();
             TiendaDAO tiendaDAO = new();
 
-            try {
+            try
+            {
                 // Creación de la conexión a BBDD
                 using MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
@@ -33,33 +37,40 @@ namespace TiendaBicicletas.database.dao {
 
                 // Lectura de datos de la consulta
                 using MySqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows) {
-                    while (reader.Read()) {
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
                         Tienda tienda = tiendaDAO.Get(reader.GetInt32(0));
                         Cliente cliente = clienteDAO.Get(reader.GetInt32(1));
                         Producto producto = productoDAO.Get(reader.GetInt32(2));
                         int cantidad = reader.GetInt32(3);
                         DateTime fecha = reader.GetDateTime(4);
 
-                        if (tienda != null && producto != null) {
+                        if (tienda != null && producto != null)
+                        {
                             ventas.Add(new(tienda, cliente, producto, cantidad, fecha));
                         }
                     }
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show($"Error al obtener ventas por tienda: {ex.Message}");
             }
 
             return ventas;
         }
 
-        public List<Venta> ListByClient(int clienteID) {
+        public List<Venta> ListByClient(int clienteID)
+        {
             List<Venta> ventas = [];
             ProductoDAO productoDAO = new();
             ClienteDAO clienteDAO = new();
             TiendaDAO tiendaDAO = new();
 
-            try {
+            try
+            {
                 // Creación de la conexión a BBDD
                 using MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
@@ -74,33 +85,40 @@ namespace TiendaBicicletas.database.dao {
 
                 // Lectura de datos de la consulta
                 using MySqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows) {
-                    while (reader.Read()) {
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
                         Tienda tienda = tiendaDAO.Get(reader.GetInt32(0));
                         Cliente cliente = clienteDAO.Get(reader.GetInt32(1));
                         Producto producto = productoDAO.Get(reader.GetInt32(2));
                         int cantidad = reader.GetInt32(3);
                         DateTime fecha = reader.GetDateTime(4);
 
-                        if (tienda != null && producto != null) {
+                        if (tienda != null && producto != null)
+                        {
                             ventas.Add(new(tienda, cliente, producto, cantidad, fecha));
                         }
                     }
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show($"Error al obtener ventas por cliente: {ex.Message}");
             }
 
             return ventas;
         }
 
-        public List<Venta> ListByProduct(int productID) {
+        public List<Venta> ListByProduct(int productID)
+        {
             List<Venta> ventas = [];
             ProductoDAO productoDAO = new();
             ClienteDAO clienteDAO = new();
             TiendaDAO tiendaDAO = new();
 
-            try {
+            try
+            {
                 // Creación de la conexión a BBDD
                 using MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
@@ -115,28 +133,35 @@ namespace TiendaBicicletas.database.dao {
 
                 // Lectura de datos de la consulta
                 using MySqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows) {
-                    while (reader.Read()) {
+                if (reader.HasRows)
+                {
+                    while (reader.Read())
+                    {
                         Tienda tienda = tiendaDAO.Get(reader.GetInt32(0));
                         Cliente cliente = clienteDAO.Get(reader.GetInt32(1));
                         Producto producto = productoDAO.Get(reader.GetInt32(2));
                         int cantidad = reader.GetInt32(3);
                         DateTime fecha = reader.GetDateTime(4);
 
-                        if (tienda != null && producto != null) {
+                        if (tienda != null && producto != null)
+                        {
                             ventas.Add(new(tienda, cliente, producto, cantidad, fecha));
                         }
                     }
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show($"Error al obtener ventas por cliente: {ex.Message}");
             }
 
             return ventas;
         }
 
-        public void Insert(Venta value) {
-            try {
+        public void Insert(Venta value)
+        {
+            try
+            {
                 // Creación de la conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
@@ -154,14 +179,18 @@ namespace TiendaBicicletas.database.dao {
 
                 // Ejecución de la consulta
                 command.ExecuteNonQuery();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show($"Error al insertar: {ex.Message}");
             }
         }
 
 
-        public void Update(int stock, Inventario value) {
-            try {
+        public void Update(int stock, Inventario value)
+        {
+            try
+            {
                 // Creación de la conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
@@ -178,7 +207,9 @@ namespace TiendaBicicletas.database.dao {
 
                 // Ejecución de la consulta
                 command.ExecuteNonQuery();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show($"Error al actualizar: {ex.Message}");
             }
         }

@@ -1,0 +1,72 @@
+﻿<Window x:Class="TiendaBicicletas.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TiendaBicicletas"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style x:Key="RoundedTextBox" TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="#AAAAAAAA"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Margin" Value="30, 0, 30, 0"/>
+
+            <Style.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="15" />
+                </Style>
+            </Style.Resources>
+        </Style>
+
+        <Style x:Key="RoundedButton" TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="#6984FC"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Margin" Value="30, 0, 30, 0"/>
+
+            <Style.Resources>
+                <Style TargetType="{x:Type Border}">
+                    <Setter Property="CornerRadius" Value="15"/>
+                </Style>
+            </Style.Resources>
+        </Style>
+    </Window.Resources>
+    
+    <Window.Background>
+        <ImageBrush ImageSource="/TiendaBicicletas;component/resource/login_bg.png"/>
+    </Window.Background>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <Rectangle Grid.Column="1">
+            <Rectangle.Fill>
+                <SolidColorBrush Color="#B0000000"/>
+            </Rectangle.Fill>
+        </Rectangle>
+
+
+
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="30*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="Login" FontSize="20" FontWeight="Bold" Foreground="White"/>
+            <TextBox Grid.Row="3" Text="📧 Username" Style="{StaticResource RoundedTextBox}"/>
+            <Button Grid.Row="5" Content="Login" Style="{StaticResource RoundedButton}" Margin="30, 10, 30, 0"/>
+        </Grid>
+    </Grid>
+</Window>

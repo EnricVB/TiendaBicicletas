@@ -6,13 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using TiendaBicicletas.src.database;
+using TiendaBicicletas.src.model;
 
-using TiendaBicicletas.model;
-
-namespace TiendaBicicletas.database.dao {
-    internal class ClienteDAO : IDAO<Cliente> {
-        public void Delete(int id) {
-            try {
+namespace TiendaBicicletas.src.database.dao
+{
+    internal class ClienteDAO : IDAO<Cliente>
+    {
+        public void Delete(int id)
+        {
+            try
+            {
                 // Creación de la conexión a BBDD
                 using MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
@@ -27,13 +31,17 @@ namespace TiendaBicicletas.database.dao {
 
                 // Ejecución de la consulta
                 command.ExecuteNonQuery();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show($"Error al eliminar el cliente con id {id}: {ex.Message}");
             }
         }
 
-        public Cliente Get(int id) {
-            try {
+        public Cliente Get(int id)
+        {
+            try
+            {
                 // Creación de la conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
@@ -48,20 +56,25 @@ namespace TiendaBicicletas.database.dao {
 
                 // Lectura de datos
                 using MySqlDataReader reader = command.ExecuteReader();
-                if(reader.Read()) {
+                if (reader.Read())
+                {
                     return new(reader.GetString(0));
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show($"Error al obtener el cliente con id {id}: {ex.Message}");
             }
 
             return null;
         }
 
-        public List<Cliente> List() {
+        public List<Cliente> List()
+        {
             List<Cliente> clientes = [];
 
-            try {
+            try
+            {
                 // Creación de la conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
@@ -75,23 +88,29 @@ namespace TiendaBicicletas.database.dao {
 
                 // Lectura de datos
                 using MySqlDataReader reader = command.ExecuteReader();
-                if (reader.Read()) {
+                if (reader.Read())
+                {
                     int id = reader.GetInt32(0);
                     string nombre = reader.GetString(1);
-                    
-                    clientes.Add(new(nombre) {
+
+                    clientes.Add(new(nombre)
+                    {
                         Id = id
                     });
                 }
-            } catch (Exception ex) {
-                MessageBox.Show($"Error al obtener el cliente con id {id}: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error al obtener los clientes: {ex.Message}");
             }
 
             return clientes;
         }
 
-        public void Insert(Cliente value) {
-            try {
+        public void Insert(Cliente value)
+        {
+            try
+            {
                 // Creación de la conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
@@ -106,13 +125,17 @@ namespace TiendaBicicletas.database.dao {
 
                 // Ejecución de la consulta
                 command.ExecuteNonQuery();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show($"Error al insertar: {ex.Message}");
             }
         }
 
-        public void Update(int id, Cliente value) {
-            try {
+        public void Update(int id, Cliente value)
+        {
+            try
+            {
                 // Creación de la conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
                 connection.Open();
@@ -128,7 +151,9 @@ namespace TiendaBicicletas.database.dao {
 
                 // Ejecución de la consulta
                 command.ExecuteNonQuery();
-            } catch (Exception ex) {
+            }
+            catch (Exception ex)
+            {
                 MessageBox.Show($"Error al actualizar: {ex.Message}");
             }
         }

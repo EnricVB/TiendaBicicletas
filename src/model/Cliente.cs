@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TiendaBicicletas.model {
-    internal class Tienda(string direccion) {
+namespace TiendaBicicletas.src.model
+{
+    internal class Cliente(string nombre)
+    {
         public int Id { get; set; }
-        public string Direccion { get; set; } = direccion;
+        public string Nombre { get; set; } = nombre;
     }
 }

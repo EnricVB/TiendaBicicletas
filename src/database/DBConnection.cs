@@ -6,23 +6,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TiendaBicicletas.database {
-    internal class DBConnection {
+namespace TiendaBicicletas.src.database
+{
+    internal class DBConnection
+    {
 
         // Esto no se debería insertar aquí, sino usando un fichero de configuración.
         private static readonly MySqlConnectionStringBuilder builder =
-            new () {
+            new()
+            {
                 Server = "localhost",
                 Port = 3306,
                 Database = "tiendabicicletas",
                 UserID = "admin",
                 Password = "admin"
-        };
+            };
+
+        private static MySqlConnection? connection = null;
 
         private DBConnection() { }
 
-        public static MySqlConnection GetConnection() {
-            return new MySqlConnection(builder.ToString());
+        public static MySqlConnection GetConnection()
+        {
+            if (connection == null) connection = new MySqlConnection(builder.ToString());
+            return connection;
         }
     }
 }
