@@ -13,9 +13,9 @@ using System.Windows.Shapes;
 
 namespace TiendaBicicletas
 {
-    public partial class MainWindow : Window
+    public partial class Login : Window
     {
-        public MainWindow()
+        public Login()
         {
             InitializeComponent();
         }
