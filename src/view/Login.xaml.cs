@@ -1,23 +1,20 @@
 ﻿using MySqlConnector;
 
-using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using TiendaBicicletas.src.model;
+using TiendaBicicletas.src.viewmodel;
 
-namespace TiendaBicicletas
-{
-    public partial class Login : Window
-    {
-        public Login()
-        {
+namespace TiendaBicicletas {
+    public partial class Login : Window {
+        private Cliente cliente = new("📧 Username");
+
+        public Login() {
             InitializeComponent();
+            this.DataContext = cliente;
+        }
+
+        private void OnButtonLogin(object sender, RoutedEventArgs e) {
+            new LoginVM(this, cliente).OnLogin();
         }
     }
 }

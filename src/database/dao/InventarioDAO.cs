@@ -9,17 +9,12 @@ using System.Windows;
 using TiendaBicicletas.src.database;
 using TiendaBicicletas.src.model;
 
-namespace TiendaBicicletas.src.database.dao
-{
-    internal class InventarioDAO
-    {
-        public void Delete(int tiendaID, int productoID)
-        {
-            try
-            {
+namespace TiendaBicicletas.src.database.dao {
+    internal class InventarioDAO {
+        public void Delete(int tiendaID, int productoID) {
+            try {
                 // Creación de la conexión a BBDD
                 using MySqlConnection connection = DBConnection.GetConnection();
-                connection.Open();
 
                 // Consulta a BBDD
                 string consulta = "DELETE FROM inventario WHERE tienda=@tiendaID AND producto=@productoID";
@@ -32,23 +27,18 @@ namespace TiendaBicicletas.src.database.dao
 
                 // Ejecución de la consulta
                 command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 MessageBox.Show($"Error al eliminar el inventario del producto {productoID} en la tienda {tiendaID}: {ex.Message}");
             }
         }
 
-        public Inventario? Get(int tiendaID)
-        {
+        public Inventario? Get(int tiendaID) {
             ProductoDAO productoDAO = new();
             TiendaDAO tiendaDAO = new();
 
-            try
-            {
+            try {
                 // Creación de la conexión a BBDD
                 using MySqlConnection connection = DBConnection.GetConnection();
-                connection.Open();
 
                 // Consulta a BBDD
                 string consulta = "SELECT producto, stock FROM tienda WHERE id = @tiendaID";
@@ -60,37 +50,30 @@ namespace TiendaBicicletas.src.database.dao
 
                 // Lectura de datos de la consulta
                 using MySqlDataReader reader = command.ExecuteReader();
-                if (reader.Read())
-                {
+                if (reader.Read()) {
                     Tienda tienda = tiendaDAO.Get(tiendaID);
                     Producto producto = productoDAO.Get(reader.GetInt32(0));
                     int stock = reader.GetInt32(1);
 
-                    if (tienda != null && producto != null)
-                    {
+                    if (tienda != null && producto != null) {
                         return new(tienda, producto, stock);
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 MessageBox.Show($"Error al obtener la tienda con id {tiendaID}: {ex.Message}");
             }
 
             return null;
         }
 
-        public List<Inventario> List()
-        {
+        public List<Inventario> List() {
             List<Inventario> inventarios = [];
             ProductoDAO productoDAO = new();
             TiendaDAO tiendaDAO = new();
 
-            try
-            {
+            try {
                 // Creación de la conexión a BBDD
                 using MySqlConnection connection = DBConnection.GetConnection();
-                connection.Open();
 
                 // Consulta a BBDD
                 string consulta = "SELECT * FROM Inventario";
@@ -101,36 +84,28 @@ namespace TiendaBicicletas.src.database.dao
 
                 // Lectura de datos de la consulta
                 using MySqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
+                if (reader.HasRows) {
+                    while (reader.Read()) {
                         Tienda tienda = tiendaDAO.Get(reader.GetInt32(0));
                         Producto producto = productoDAO.Get(reader.GetInt32(1));
                         int stock = reader.GetInt32(2);
 
-                        if (tienda != null && producto != null)
-                        {
+                        if (tienda != null && producto != null) {
                             inventarios.Add(new(tienda, producto, stock));
                         }
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 MessageBox.Show($"Error al obtener todas las tiendas: {ex.Message}");
             }
 
             return inventarios;
         }
 
-        public void Insert(Inventario value)
-        {
-            try
-            {
+        public void Insert(Inventario value) {
+            try {
                 // Creación de la conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
-                connection.Open();
 
                 // Consulta a BBDD
                 string consulta = "INSERT INTO Inventario (tienda, producto, stock) VALUES (@tiendaID, @productoID, @stock);";
@@ -144,21 +119,16 @@ namespace TiendaBicicletas.src.database.dao
 
                 // Ejecución de la consulta
                 command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 MessageBox.Show($"Error al insertar: {ex.Message}");
             }
         }
 
 
-        public void Update(int stock, Inventario value)
-        {
-            try
-            {
+        public void Update(int stock, Inventario value) {
+            try {
                 // Creación de la conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
-                connection.Open();
 
                 // Consulta a BBDD
                 string consulta = "UPDATE Inventario SET stock=@stock WHERE tienda=@tiendaID AND producto=@productID;";
@@ -172,9 +142,7 @@ namespace TiendaBicicletas.src.database.dao
 
                 // Ejecución de la consulta
                 command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 MessageBox.Show($"Error al actualizar: {ex.Message}");
             }
         }

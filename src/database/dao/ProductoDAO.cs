@@ -9,17 +9,12 @@ using System.Windows;
 using TiendaBicicletas.src.database;
 using TiendaBicicletas.src.model;
 
-namespace TiendaBicicletas.src.database.dao
-{
-    internal class ProductoDAO : IDAO<Producto>
-    {
-        public void Delete(int id)
-        {
-            try
-            {
+namespace TiendaBicicletas.src.database.dao {
+    internal class ProductoDAO : IDAO<Producto> {
+        public void Delete(int id) {
+            try {
                 // Creación de la conexión a BBDD
                 using MySqlConnection connection = DBConnection.GetConnection();
-                connection.Open();
 
                 // Consulta a BBDD
                 string consulta = "DELETE FROM producto WHERE id=@prodID";
@@ -31,22 +26,17 @@ namespace TiendaBicicletas.src.database.dao
 
                 // Ejecución de la consulta
                 command.ExecuteNonQuery();
-            }
-            catch (Exception ex)
-            {
+            } catch (Exception ex) {
                 MessageBox.Show($"Error al eliminar el producto con id {id}: {ex.Message}");
             }
         }
 
-        public Producto? Get(int id)
-        {
+        public Producto? Get(int id) {
             CategoriaDAO categoriaDAO = new();
 
-            try
-            {
+            try {
                 // Creación de conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
-                connection.Open();
 
                 // Consulta a BBDD
                 string consulta = "SELECT nombre, descripcion, precio, categoria FROM productos WHERE id=@prodID";
@@ -58,37 +48,30 @@ namespace TiendaBicicletas.src.database.dao
 
                 // Lectura de datos
                 using MySqlDataReader reader = command.ExecuteReader();
-                if (reader.Read())
-                {
+                if (reader.Read()) {
                     string nombre = reader.GetString(0);
                     string descripcion = reader.GetString(1);
                     decimal precio = reader.GetDecimal(2);
                     int categoriaID = reader.GetInt32(3);
 
-                    return new(nombre, descripcion, precio, categoriaDAO.Get(categoriaID))
-                    {
+                    return new(nombre, descripcion, precio, categoriaDAO.Get(categoriaID)) {
                         Id = id
                     };
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 MessageBox.Show($"Error al obtener el producto con id {id}: {e.Message}");
             }
 
             return null;
         }
 
-        public List<Producto> List()
-        {
+        public List<Producto> List() {
             CategoriaDAO categoriaDAO = new();
             List<Producto> productos = [];
 
-            try
-            {
+            try {
                 // Creación de conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
-                connection.Open();
 
                 // Consulta a BBDD
                 string consulta = "SELECT id, nombre, descripcion, precio, categoria FROM productos";
@@ -99,35 +82,28 @@ namespace TiendaBicicletas.src.database.dao
 
                 // Lectura de datos
                 using MySqlDataReader reader = command.ExecuteReader();
-                if (reader.Read())
-                {
+                if (reader.Read()) {
                     int id = reader.GetInt32(0);
                     string nombre = reader.GetString(1);
                     string descripcion = reader.GetString(2);
                     decimal precio = reader.GetDecimal(3);
                     int categoriaID = reader.GetInt32(4);
 
-                    productos.Add(new(nombre, descripcion, precio, categoriaDAO.Get(categoriaID))
-                    {
+                    productos.Add(new(nombre, descripcion, precio, categoriaDAO.Get(categoriaID)) {
                         Id = id
                     });
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 MessageBox.Show($"Error al obtener todos los productos: {e.Message}");
             }
 
             return productos;
         }
 
-        public void Insert(Producto value)
-        {
-            try
-            {
+        public void Insert(Producto value) {
+            try {
                 // Creación de conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
-                connection.Open();
 
                 // Consulta a BBDD
                 string consulta = "INSERT INTO productos(nombre, descripcion, precio, categoria) VALUES(@prodName, @prodDesc, @prodPrecio, @prodCat)";
@@ -142,20 +118,15 @@ namespace TiendaBicicletas.src.database.dao
 
                 // Ejecución de la consulta
                 command.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 MessageBox.Show($"Error al insertar un producto: {e.Message}");
             }
         }
 
-        public void Update(int id, Producto value)
-        {
-            try
-            {
+        public void Update(int id, Producto value) {
+            try {
                 // Creación de conexión a BBDD
                 MySqlConnection connection = DBConnection.GetConnection();
-                connection.Open();
 
                 // Consulta a BBDD
                 string consulta = "UPDATE productos SET nombre=@prodName, descripcion=@prodDesc, precio=@prodPrecio, categoria=@prodCat WHERE id=@prodID)";
@@ -171,9 +142,7 @@ namespace TiendaBicicletas.src.database.dao
 
                 // Ejecución de la consulta
                 command.ExecuteNonQuery();
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 MessageBox.Show($"Error al insertar un producto: {e.Message}");
             }
         }
